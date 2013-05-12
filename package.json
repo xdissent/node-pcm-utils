@@ -1,0 +1,28 @@
+{
+  "name": "pcm-utils",
+  "description": "PCM audio utilities for Node.js",
+  "keywords": [
+    "audio",
+    "sound",
+    "pcm"
+  ],
+  "version": "0.0.0",
+  "author": "Greg Thornton <xdissent@me.com> (http://xdissent.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/xdissent/node-pcm-utils",
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xdissent/node-pcm-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xdissent/node-pcm-utils/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-script": ">= 1.6.2"
+  },
+  "scripts": {
+    "prepublish": "coffee -cbo lib src"
+  }
+}
