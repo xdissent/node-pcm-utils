@@ -3,8 +3,6 @@ node-pcm-utils
 
 PCM audio utilities for Node.js
 
-**WARNING** This is a javascript-only implementation currently, which will crush your CPU and probably ruin your event loop. It's a proof of concept to be ported to a proper C++ addon with evented operations.
-
 
 Installation
 ------------
