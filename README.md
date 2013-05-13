@@ -13,6 +13,8 @@ Features
 
 * **Mixing** - Mix 2 or more PCM channels into one.
 
+* **Format conversion** - Transform a stream from one PCM format to another (ie. float to int).
+
 * **Evented** - Doesn't block the main loop, thanks to [`uv_queue_work`](http://nikhilm.github.io/uvbook/threads.html#libuv-work-queue).
 
 * **Streams2 compatible** - Everything's just a pipeable [stream](http://nodejs.org/api/stream.html).
@@ -62,7 +64,11 @@ var pcmUtils = require('pcm-utils'),
   zipper = new pcmUtils.Zipper(channels, format),
   
   // Mixer mixes multiple channels into a single channel stream.
-  mixer = new pcmUtils.Mixer(channels, format);
+  mixer = new pcmUtils.Mixer(channels, format),
+  
+  // Formatter transforms single-channel PCM data from one format to another,
+  // 32 bit little-endian float to signed 16 bit little-endian integer in this case.
+  formatter = new pcmUtils.Formatter(format, pcmUtils.FMT_S16LE);
 
 // Read interleaved PCM data from stdin
 process.stdin.pipe(unzipper);
@@ -76,4 +82,10 @@ zipper.pipe(process.stdout);
 unzipper.left.pipe(mixer.left);     // or `unzipper.outputs[0].pipe(mixer.inputs[0]);
 unzipper.right.pipe(mixer.right);   // or `unzipper.outputs[1].pipe(mixer.inputs[1]);
 mixer.pipe(process.stderr);
+
+// Convert the mono mixer output into signed 16 bit little-endian and write to file.
+var fs = require('fs'),
+  outFileStream = fs.createWriteStream('/tmp/s16le.pcm');
+formatter.pipe(outFileStream);
+mixer.pipe(formatter);
 ```
