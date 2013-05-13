@@ -2,6 +2,7 @@
 #include "mixer.h"
 #include "unzipper.h"
 #include "zipper.h"
+#include "formatter.h"
 
 using namespace v8;
 using namespace node;
@@ -12,6 +13,7 @@ void Init(Handle<Object> exports) {
   Mixer::Init(exports);
   Unzipper::Init(exports);
   Zipper::Init(exports);
+  Formatter::Init(exports);
 }
 
 }
