@@ -3,7 +3,7 @@ stream = require 'stream'
 pcm = require './constants'
 
 class Unzipper extends stream.Writable
-  constructor: (@channels, @format=pcm.FMT_F32LE) ->
+  constructor: (@channels=2, @format=pcm.FMT_F32LE) ->
     stream.Writable.call this
     @alignment = pcm.ALIGNMENTS[@format]
     @unzipper = new binding.Unzipper @channels, @alignment

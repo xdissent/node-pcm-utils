@@ -3,7 +3,7 @@ stream = require 'stream'
 pcm = require './constants'
 
 class Mixer extends stream.Readable
-  constructor: (@channels, @format=pcm.FMT_F32LE) ->
+  constructor: (@channels=2, @format=pcm.FMT_F32LE) ->
     stream.Readable.call this
     @alignment = pcm.ALIGNMENTS[@format]
     @mixer = new binding.Mixer @channels, @alignment, @format, (err, chunk) =>
