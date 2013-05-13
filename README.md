@@ -74,13 +74,13 @@ var pcmUtils = require('pcm-utils'),
 process.stdin.pipe(unzipper);
 
 // Unzip (de-interleave) it then zip it right back up to stdout
-unzipper.left.pipe(zipper.left);    // or `unzipper.outputs[0].pipe(zipper.inputs[0]);
-unzipper.right.pipe(zipper.right);  // or `unzipper.outputs[1].pipe(zipper.inputs[1]);
+unzipper.left.pipe(zipper.left);    // or `unzipper.outputs[0].pipe(zipper.inputs[0]);`
+unzipper.right.pipe(zipper.right);  // or `unzipper.outputs[1].pipe(zipper.inputs[1]);`
 zipper.pipe(process.stdout);
 
 // Mix left and right channels and pipe mono to stderr
-unzipper.left.pipe(mixer.left);     // or `unzipper.outputs[0].pipe(mixer.inputs[0]);
-unzipper.right.pipe(mixer.right);   // or `unzipper.outputs[1].pipe(mixer.inputs[1]);
+unzipper.left.pipe(mixer.left);     // or `unzipper.outputs[0].pipe(mixer.inputs[0]);`
+unzipper.right.pipe(mixer.right);   // or `unzipper.outputs[1].pipe(mixer.inputs[1]);`
 mixer.pipe(process.stderr);
 
 // Convert the mono mixer output into signed 16 bit little-endian and write to file.
