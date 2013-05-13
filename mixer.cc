@@ -167,12 +167,12 @@ void Mixer::DoMix(uv_work_t* req) {
       sum = 0;
       for (int c = 0; c < mix->channels; c++) {
         uint16_t* in = static_cast<uint16_t*>(static_cast<void*>(baton->channelData[c]));
-        sum += in[i] / mix->channels;
+        sum += (in[i] - 32768) / mix->channels;
       }
-      out[i] = sum;
+      out[i] = sum + 32768;
     }
   } else {
-    // fprintf(stderr, "Unsupported format\n");
+    fprintf(stderr, "Unsupported format\n");
   }
 }
 
