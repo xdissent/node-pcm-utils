@@ -1,19 +1,17 @@
 binding = require '../build/Release/binding'
 stream = require 'stream'
+pcm = require './constants'
 
 class Zipper extends stream.Readable
-  constructor: (@channels, @alignment) ->
+  constructor: (@channels, @format=pcm.FMT_F32LE) ->
     stream.Readable.call this
-
+    @alignment = pcm.ALIGNMENTS[@format]
     @zipper = new binding.Zipper @channels, @alignment, (err, chunk) =>
       throw err if err?
       @push chunk
-
     @bufferSize = @zipper.samplesPerBuffer * @alignment
-
     @inputs = for i in [0...@channels]
       do (i) => (new stream.PassThrough).on 'readable', => @readInput(i)
-
     @mono = @inputs[0] if @channels == 1
     [@left, @right] = [@inputs[0], @inputs[1]] if @channels == 2
 

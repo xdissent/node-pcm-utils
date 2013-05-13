@@ -19,7 +19,7 @@ public:
   static void Init(Handle<Object> exports);
 
 protected:
-  Mixer() : ObjectWrap(), channels(0), alignment(0), mixing(false) {
+  Mixer() : ObjectWrap(), channels(0), alignment(0), format(0), mixing(false) {
     channelBuffers.Clear();
     channelsReady.Clear();
     callback.Clear();
@@ -28,6 +28,7 @@ protected:
   ~Mixer() {
     channels = 0;
     alignment = 0;
+    format = 0;
     mixing = false;
     channelBuffers.Dispose();
     channelsReady.Dispose();
@@ -93,6 +94,7 @@ protected:
   Persistent<Function> callback;
   int channels;
   int alignment;
+  int format;
   bool mixing;
 };
 

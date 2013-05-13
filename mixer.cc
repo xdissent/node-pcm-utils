@@ -24,14 +24,19 @@ Handle<Value> Mixer::New(const Arguments& args) {
   if (!args.IsConstructCall())
     return ThrowException(Exception::TypeError(String::New("Use the new operator")));
 
-  REQUIRE_ARGUMENTS(3);
-  REQUIRE_ARGUMENT_FUNCTION(2, callback);
+  REQUIRE_ARGUMENTS(4);
+  REQUIRE_ARGUMENT_FUNCTION(3, callback);
 
   Mixer* mix = new Mixer();
   mix->Wrap(args.This());
 
   mix->channels = args[0]->Int32Value();
   mix->alignment = args[1]->Int32Value();
+  mix->format = args[2]->Int32Value();
+
+  if (mix->format % 2 > 0)
+    return ThrowException(Exception::TypeError(String::New("Big-Endian formats currently unsupported by Mixer")));
+
   mix->callback = Persistent<Function>::New(callback);
   mix->mixing = false;
 
@@ -131,17 +136,43 @@ void Mixer::BeginMix(Baton* baton) {
 void Mixer::DoMix(uv_work_t* req) {
   MixBaton* baton = static_cast<MixBaton*>(req->data);
   Mixer* mix = baton->mix;
-  
+
   // Save back into first channel buffer
-  float* out = static_cast<float*>(static_cast<void*>(baton->channelData[0]));
-  float sum;
-  for (int i = 0; i < MIX_BUFFER_SAMPLES; i++) {
-    sum = 0;
-    for (int c = 0; c < mix->channels; c++) {
-      float* in = static_cast<float*>(static_cast<void*>(baton->channelData[c]));
-      sum += in[i] / mix->channels;
+  if (mix->format == 0) {
+    float* out = static_cast<float*>(static_cast<void*>(baton->channelData[0]));
+    float sum;
+    for (int i = 0; i < MIX_BUFFER_SAMPLES; i++) {
+      sum = 0;
+      for (int c = 0; c < mix->channels; c++) {
+        float* in = static_cast<float*>(static_cast<void*>(baton->channelData[c]));
+        sum += in[i] / mix->channels;
+      }
+      out[i] = sum;
     }
-    out[i] = sum;
+  } else if (mix->format == 2) {
+    int16_t* out = static_cast<int16_t*>(static_cast<void*>(baton->channelData[0]));
+    int16_t sum;
+    for (int i = 0; i < MIX_BUFFER_SAMPLES; i++) {
+      sum = 0;
+      for (int c = 0; c < mix->channels; c++) {
+        int16_t* in = static_cast<int16_t*>(static_cast<void*>(baton->channelData[c]));
+        sum += in[i] / mix->channels;
+      }
+      out[i] = sum;
+    }
+  } else if (mix->format == 4) {
+    uint16_t* out = static_cast<uint16_t*>(static_cast<void*>(baton->channelData[0]));
+    uint16_t sum;
+    for (int i = 0; i < MIX_BUFFER_SAMPLES; i++) {
+      sum = 0;
+      for (int c = 0; c < mix->channels; c++) {
+        uint16_t* in = static_cast<uint16_t*>(static_cast<void*>(baton->channelData[c]));
+        sum += in[i] / mix->channels;
+      }
+      out[i] = sum;
+    }
+  } else {
+    // fprintf(stderr, "Unsupported format\n");
   }
 }
 
