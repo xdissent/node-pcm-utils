@@ -151,7 +151,8 @@ void Mixer::AfterMix(uv_work_t* req) {
   MixBaton* baton = static_cast<MixBaton*>(req->data);
   Mixer* mix = baton->mix;
 
-  Local<Value> outBuffer = mix->channelBuffers->Get(0);
+  size_t blen = Buffer::Length(mix->channelBuffers->Get(0)->ToObject());
+  Buffer* buffer = Buffer::New(Buffer::Data(mix->channelBuffers->Get(0)->ToObject()), blen);
 
   for (int i = 0; i < mix->channels; i++) {
     mix->channelsReady->Set(i, Boolean::New(false));
@@ -165,7 +166,7 @@ void Mixer::AfterMix(uv_work_t* req) {
   delete baton;
 
   if (!mix->callback.IsEmpty() && mix->callback->IsFunction()) {
-    Local<Value> argv[2] = { Local<Value>::New(Null()), outBuffer };
+    Local<Value> argv[2] = { Local<Value>::New(Null()), Local<Value>::New(buffer->handle_) };
     TRY_CATCH_CALL(mix->handle_, mix->callback, 2, argv);
   }
 }
