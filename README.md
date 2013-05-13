@@ -1,6 +1,8 @@
 node-pcm-utils
 ==============
 
+[![NPM version](https://badge.fury.io/js/pcm-utils.png)](http://badge.fury.io/js/pcm-utils)
+
 PCM audio utilities for Node.js
 
 
