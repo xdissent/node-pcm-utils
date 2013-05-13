@@ -23,7 +23,7 @@ Usage
 var pcm = require('pcm-utils');
 
 var channels = 2,  // 2 channels (left/right)
-  alignment = 2;   // 2 bytes per sample (16 bit)
+  alignment = 4;   // 4 bytes per sample (32 bit float)
 
 var unzipper = new pcm.Unzipper(channels, alignment),
   zipper = new pcm.Zipper(channels, alignment),
