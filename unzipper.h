@@ -68,8 +68,10 @@ protected:
       }
 
       totalFrames = chunkLength / unz->frameAlignment;
-      int leftoverBytes = chunkLength % unz->frameAlignment;
-      if (leftoverBytes != 0) fprintf(stderr, "LEFTOVRES: %d\n", leftoverBytes);
+
+      // Todo - check for and handle alignment issues
+      // int leftoverBytes = chunkLength % unz->frameAlignment;
+      // if (leftoverBytes != 0) fprintf(stderr, "LEFTOVRES: %d\n", leftoverBytes);
     }
     virtual ~UnzipBaton() {
       callback.Dispose();
