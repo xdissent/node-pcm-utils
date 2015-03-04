@@ -1,6 +1,8 @@
 #ifndef UNZIPPER_H
 #define UNZIPPER_H
 
+#include <cstdlib>
+#include <cstring>
 #include <node.h>
 #include <node_buffer.h>
 #include "macros.h"

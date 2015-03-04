@@ -1,6 +1,7 @@
 #ifndef FORMATTER_H
 #define FORMATTER_H
 
+#include <cstdlib>
 #include <node.h>
 #include <node_buffer.h>
 #include "macros.h"
