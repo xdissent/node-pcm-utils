@@ -1,6 +1,7 @@
 #ifndef MIXER_H
 #define MIXER_H
 
+#include <cstdlib>
 #include <node.h>
 #include <node_buffer.h>
 #include "macros.h"
